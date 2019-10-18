@@ -19,6 +19,8 @@ import useResults from '../hooks/useResults';
 import WeatherList from '../components/WeatherList';
 import weatherIcon from '../utils/icons';
 import BackgroundImage from '../components/BackgroundImage';
+import {API_KEY} from '../utils/WeatherApiKey';
+import Icon from 'react-native-vector-icons/Feather';
 
 const FirstScreen = ({navigation}) => {
   const [results, setResults] = useState([]);
@@ -29,9 +31,9 @@ const FirstScreen = ({navigation}) => {
     '#123456',
     '#654321',
     '#E3AD8B',
-    '#67AFD0',
-    '#A8CDC9',
-    '#F19273',
+    '#B370DA',
+    '#108E9C',
+    '#154192',
   ];
 
   const weatherApi = () => {
@@ -39,13 +41,13 @@ const FirstScreen = ({navigation}) => {
     try {
       axios
         .get(
-          'http://api.openweathermap.org/data/2.5/group?id=1277333,1264527,1259229,1275339,1273294,1266285&units=metric&APPID=971d3aad3083a2a5c2fce97ca8006581',
+          `http://api.openweathermap.org/data/2.5/group?id=1277333,1264527,1259229,1275339,1273294,1269843,1275004,1255364,1270260&units=metric&APPID=${API_KEY}`,
         )
         .then(res => {
           //setResults(res.data.list)
           setloader(false);
           console.log(res);
-          console.log('array', res.data.list);
+          console.log('array', res.data);
           setResults(res.data.list);
         });
       //setResults(response.data.coord);s
@@ -72,54 +74,72 @@ const FirstScreen = ({navigation}) => {
           flex: 1,
           backgroundColor: '#587AA1',
         }}>
-        {/* <BackgroundImage
-          source={{
-            uri: 'https://facebook.github.io/react-native/img/header_logo.png',
-          }}> */}
+        <View
+          style={{position: 'absolute', top: 0, bottom: 0, left: 0, right: 0}}>
+          <Image
+            style={{
+              flex: 1,
+              flexDirection: 'column',
+              width: null,
+              height: null,
+              backgroundColor: 'transparent',
+              justifyContent: 'center',
+            }}
+            source={require('../utils/images/weather1.jpg')}
+          />
+        </View>
+        {/* <View style={{backgroundColor: 'transparent'}}> */}
         <FlatList
           data={results}
+          //style={{opacity: 0.5}}
           ListEmptyComponent={<Text>NOTHING HERE</Text>}
           horizontal={true}
           showsHorizontalScrollIndicator={false}
           renderItem={({item, index}) => (
-            <View style={{justifyContent: 'center', alignItems: 'center'}}>
-              {/* <ImageBackground
-                style={{width: 300, height: 350}}
-                source={{
-                  uri:
-                    'https://facebook.github.io/react-native/img/tiny_logo.png',
-                }}
-              /> */}
+            <View
+              style={{
+                marginTop: 20,
+                backgroundColor: colors[index % colors.length],
+                opacity: 0.8,
+                //backgroundColor: 'transparent',
+                marginLeft: 25,
+                borderRadius: 25,
+                height: 330,
+                width: 300,
+                //borderColor: 'black',
+                alignSelf: 'center',
+              }}>
               <TouchableOpacity
                 onPress={() => navigation.navigate('Second', {id: item.id})}>
-                <View
-                  style={{
-                    backgroundColor: colors[index % colors.length],
-                    marginLeft: 25,
-                    borderRadius: 25,
-                    height: 350,
-                    width: 300,
-                  }}>
-                  <WeatherList
-                    city={item.name}
-                    allDateTime={item.dt}
-                    temp={item.main.temp}
-                    desc={item.weather[0].description}
-                    tempmin={item.main.temp_min}
-                    tempmax={item.main.temp_max}
-                    icon={item.weather[0].icon}
-                  />
-                </View>
+                <WeatherList
+                  city={item.name}
+                  allDateTime={item.dt}
+                  temp={item.main.temp}
+                  desc={item.weather[0].description}
+                  tempmin={item.main.temp_min}
+                  tempmax={item.main.temp_max}
+                  icon={item.weather[0].icon}
+                />
               </TouchableOpacity>
             </View>
           )}
-          keyExtractor={({item, index}) => index}
+          keyExtractor={item => item.name}
         />
-        {/* </BackgroundImage> */}
+        {/* </View> */}
         {errorMessage ? <Text>{errorMessage}</Text> : null}
       </View>
     );
   }
+};
+
+FirstScreen.navigationOptions = ({navigation}) => {
+  return {
+    headerRight: (
+      <TouchableOpacity onPress={() => navigation.navigate('Setting')}>
+        <Icon name="settings" size={30} style={{marginRight: 10}} />
+      </TouchableOpacity>
+    ),
+  };
 };
 
 const styles = StyleSheet.create({});

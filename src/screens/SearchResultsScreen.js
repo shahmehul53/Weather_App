@@ -23,7 +23,7 @@ import Icon from 'react-native-vector-icons/Feather';
 import useResults from '../hooks/useResults';
 import LocationContext from '../context/LocationContext';
 
-const SecondScreen = ({navigation}) => {
+const SearchResultsScreen = ({navigation}) => {
   // const [
   //   weatherApi,
   //   results,
@@ -122,4 +122,4 @@ const SecondScreen = ({navigation}) => {
 
 const styles = StyleSheet.create({});
 
-export default SecondScreen;
+export default SearchResultsScreen;

@@ -1,8 +1,16 @@
 import React, {Component} from 'react';
-import {Text, View, StyleSheet, FlatList, Image} from 'react-native';
+import {
+  Text,
+  View,
+  StyleSheet,
+  FlatList,
+  Image,
+  ImageBackground,
+} from 'react-native';
 import TimeConversion from './TimeConversion';
 import Spacer from './Spacer';
 import weatherIcon from '../utils/icons';
+import BackgroundImage from './BackgroundImage';
 
 const WeatherList = ({
   city,
@@ -35,6 +43,7 @@ const WeatherList = ({
         style={{height: 100, width: 100}}
         source={{uri: `http://openweathermap.org/img/wn/${icon}.png`}}
       />
+      {/* </BackgroundImage> */}
     </View>
   );
 };
@@ -51,12 +60,14 @@ const styles = StyleSheet.create({
     // marginLeft: 25,
   },
   textStyle: {
-    color: '#FDFFFF',
+    //color: '#FDFFFF',
+    color: 'black',
     fontSize: 30,
     //paddingTop: 20
   },
   tempStyle: {
-    color: '#FDFFFF',
+    //color: '#FDFFFF',
+    color: 'black',
     justifyContent: 'center',
     //alignItems: 'center',
     fontSize: 40,
@@ -65,11 +76,13 @@ const styles = StyleSheet.create({
   },
   descStyle: {
     //paddingTop: 10,
-    color: '#FDFFFF',
+    //color: '#FDFFFF',
+    color: 'black',
     fontSize: 30,
   },
   minmaxStyle: {
-    color: '#FDFFFF',
+    //color: '#FDFFFF',
+    color: 'black',
     fontSize: 12,
     fontWeight: 'bold',
     // paddingVertical: 10
