@@ -1,43 +1,29 @@
 import React, {Component, useEffect, useState, useContext} from 'react';
 import {
-  SafeAreaView,
   StyleSheet,
-  ScrollView,
   View,
   Text,
-  StatusBar,
-  Button,
-  Dimensions,
-  Image,
-  FlatList,
   TouchableOpacity,
   ActivityIndicator,
-  ImageBackground,
 } from 'react-native';
 import axios from 'axios';
-
 import WeatherList from '../components/WeatherList';
-import weatherIcon from '../utils/icons';
 import {API_KEY} from '../utils/WeatherApiKey';
-import Icon from 'react-native-vector-icons/Feather';
-import useResults from '../hooks/useResults';
-import LocationContext from '../context/LocationContext';
+import LocationContext1 from '../context/LocationContext1';
+import {withTheme} from '../core/themeProvider';
+import WeatherDetails from '../components/WeatherDetails';
 
-const SearchResultsScreen = ({navigation}) => {
-  // const [
-  //   weatherApi,
-  //   results,
-  //   errorMessage,
-  //   weather1,
-  //   temp1,
-  //   loader,
-  // ] = useResults();
-  const [results, setResults] = useState([]);
-  const [location, setLocation] = useContext(LocationContext);
+const SecondScreen = ({theme}) => {
+  const initialState = {
+    data: {},
+    list: [],
+    main: {},
+    weather: [0],
+  };
+  const [results, setResults] = useState(initialState);
+  const [location, setLocation] = useContext(LocationContext1);
   const [loader, setloader] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
-  const [weather1, setWeather] = useState([]);
-  const [temp1, setTemp] = useState('');
 
   const weatherApi = () => {
     console.log('Hi');
@@ -47,15 +33,9 @@ const SearchResultsScreen = ({navigation}) => {
           `http://api.openweathermap.org/data/2.5/find?lat=${location.lat}&lon=${location.lon}&cnt=10&APPID=${API_KEY}`,
         )
         .then(res => {
-          //setResults(res.data.list)
           setloader(false);
-          console.log(res);
-          console.log('array', res.data.list[0].main);
           setResults(res.data.list[0]);
-          setTemp(res.data.list[0].main);
-          setWeather(res.data.list[0].weather[0]);
         });
-      //setResults(response.data.coord);
     } catch (err) {
       setErrorMessage('Something Went Wrong');
     }
@@ -78,39 +58,19 @@ const SearchResultsScreen = ({navigation}) => {
       console.log(location),
       (
         <View
-          style={{
-            flex: 1,
-            backgroundColor: '#587AA1',
-          }}>
-          <View
-            style={{
-              position: 'absolute',
-              top: 0,
-              bottom: 0,
-              left: 0,
-              right: 0,
-            }}>
-            <Image
-              style={{
-                flex: 1,
-                flexDirection: 'column',
-                width: null,
-                height: null,
-                backgroundColor: 'transparent',
-                justifyContent: 'center',
-              }}
-              source={require('../utils/images/weather1.jpg')}
-            />
-          </View>
+          style={[styles.container, {backgroundColor: theme.backgroundColor}]}>
+          <Text style={[styles.textStyle, {color: theme.color}]}>
+            TEST SCREEN
+          </Text>
           <TouchableOpacity>
-            <WeatherList
+            <WeatherDetails
               city={results.name}
               allDateTime={results.dt}
-              temp={temp1.temp}
-              desc={weather1.description}
-              tempmin={temp1.temp_min}
-              tempmax={temp1.temp_max}
-              icon={weather1.icon}
+              temp={results.main.temp}
+              desc={results.weather[0].description}
+              tempmin={results.main.temp_min}
+              tempmax={results.main.temp_max}
+              icon={results.weather[0].icon}
             />
           </TouchableOpacity>
           {errorMessage ? <Text>{errorMessage}</Text> : null}
@@ -120,6 +80,16 @@ const SearchResultsScreen = ({navigation}) => {
   }
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  textStyle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
+});
 
-export default SearchResultsScreen;
+export default withTheme(SecondScreen);

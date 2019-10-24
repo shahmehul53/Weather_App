@@ -15,28 +15,36 @@ import SecondScreen from './src/screens/SecondScreen';
 import GeoLocationScreen from './src/screens/GeoLocationScreen';
 import SearchCityScreen from './src/screens/SearchCityScreen';
 import SettingsScreen from './src/screens/SettingsScreen';
-import {LocationProvider} from './src/context/LocationContext';
+import {LocationProvider} from './src/context/LocationContext1';
 import SearchResultsScreen from './src/screens/SearchResultsScreen';
 import {ThemeProvider} from './src/context/ThemeContext';
+import ThemeScreen from './src/screens/ThemeScreen';
+import {ThemeContextProvider} from './src/core/themeProvider';
+
+import SplashScreen from './src/screens/SplashScreen';
 
 const navigator = createStackNavigator({
+  Splash: SplashScreen,
   First: FirstScreen,
   Second: SecondScreen,
   GeoLocation: GeoLocationScreen,
   SearchCity: SearchCityScreen,
   Setting: SettingsScreen,
   SearchResults: SearchResultsScreen,
+  ThemeSetting: ThemeScreen,
 });
 
 const App = createAppContainer(navigator);
 
 export default () => {
   return (
-    <LocationProvider>
-      <ThemeProvider>
-        <App />
-      </ThemeProvider>
-    </LocationProvider>
+    <ThemeContextProvider>
+      <LocationProvider>
+        <ThemeProvider>
+          <App />
+        </ThemeProvider>
+      </LocationProvider>
+    </ThemeContextProvider>
   );
 };
 

@@ -10,11 +10,11 @@ import {
 } from 'react-native';
 import SettingsListButton from '../components/SettingsListButton';
 import ThemeContext from '../context/ThemeContext';
+import {withTheme} from '../core/themeProvider';
 
-const SettingsScreen = ({navigation}) => {
-  const [theme, dark, toggle] = useContext(ThemeContext);
+const SettingsScreen = ({navigation, theme}) => {
   return (
-    <View style={{flex: 1, backgroundColor: theme}}>
+    <View style={[styles.container, {backgroundColor: theme.backgroundColor}]}>
       <SettingsListButton
         title="Get Current Geolocation"
         onPress={() => navigation.navigate('GeoLocation')}
@@ -23,7 +23,11 @@ const SettingsScreen = ({navigation}) => {
         title="Search Your City"
         onPress={() => navigation.navigate('SearchCity')}
       />
-      <SettingsListButton title="Change the theme" onPress={() => toggle()} />
+      <SettingsListButton
+        title="Change the theme"
+        //onPress={() => toggle()}
+        onPress={() => navigation.navigate('ThemeSetting')}
+      />
     </View>
   );
 };
@@ -35,4 +39,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SettingsScreen;
+export default withTheme(SettingsScreen);

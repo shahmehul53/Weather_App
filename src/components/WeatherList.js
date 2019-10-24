@@ -7,10 +7,11 @@ import {
   Image,
   ImageBackground,
 } from 'react-native';
-import TimeConversion from './TimeConversion';
+import DateConversion from './DateConversion';
 import Spacer from './Spacer';
 import weatherIcon from '../utils/icons';
 import BackgroundImage from './BackgroundImage';
+import {withTheme} from '../core/themeProvider';
 
 const WeatherList = ({
   city,
@@ -20,73 +21,72 @@ const WeatherList = ({
   tempmax,
   allDateTime,
   icon,
+  theme,
 }) => {
-  const {container, textStyle, tempStyle, descStyle, minmaxStyle} = styles;
-  //   const [icon1, setIcon] = useState(icon);
+  const {
+    container,
+    textStyle,
+    tempStyle,
+    descStyle,
+    minmaxStyle,
+    imgStyle,
+  } = styles;
 
   return (
     <View style={container}>
-      <Spacer>
-        <Text style={textStyle}>{city}</Text>
-      </Spacer>
-      <TimeConversion allDateTime={allDateTime}>{allDateTime}</TimeConversion>
-      <Spacer>
-        <Text style={tempStyle}>{temp}&deg;C</Text>
-      </Spacer>
-      <Text style={descStyle}>{desc}</Text>
-      <Spacer>
-        <Text style={minmaxStyle}>
-          {tempmin}&deg;C/{tempmax}&deg;C
+      <Text style={[textStyle, {color: theme.color}]}>{city}</Text>
+      <DateConversion allDateTime={allDateTime}>{allDateTime}</DateConversion>
+      <View style={{flexDirection: 'row'}}>
+        <Text style={[tempStyle, {color: theme.color}]}>
+          {Math.round(temp)}
         </Text>
-      </Spacer>
+        <Text
+          style={[
+            {fontSize: 24, paddingTop: 13, fontWeight: 'bold'},
+            {color: theme.color},
+          ]}>
+          &deg;C
+        </Text>
+      </View>
+      <Text style={[descStyle, {color: theme.color}]}>{desc}</Text>
+      <Text style={[minmaxStyle, {color: theme.color}]}>
+        {Math.round(tempmin)}&deg;C/{Math.round(tempmax)}&deg;C
+      </Text>
       <Image
-        style={{height: 100, width: 100}}
+        style={imgStyle}
         source={{uri: `http://openweathermap.org/img/wn/${icon}.png`}}
       />
-      {/* </BackgroundImage> */}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    // height: 350,
-    // width: 300,
-    // backgroundColor: '#67AFD0',
-    // borderRadius: 25,
     justifyContent: 'center',
     alignItems: 'center',
-    // //margin: 50,
-    // marginLeft: 25,
   },
   textStyle: {
-    //color: '#FDFFFF',
-    color: 'black',
     fontSize: 30,
-    //paddingTop: 20
+    paddingTop: 20,
+    fontWeight: 'bold',
   },
   tempStyle: {
-    //color: '#FDFFFF',
-    color: 'black',
-    justifyContent: 'center',
-    //alignItems: 'center',
-    fontSize: 40,
-    fontWeight: 'bold',
-    //paddingVertical: 20
+    fontSize: 60,
   },
   descStyle: {
-    //paddingTop: 10,
-    //color: '#FDFFFF',
-    color: 'black',
-    fontSize: 30,
+    fontSize: 20,
+    paddingHorizontal: 20,
   },
   minmaxStyle: {
-    //color: '#FDFFFF',
-    color: 'black',
-    fontSize: 12,
+    fontSize: 16,
+    paddingTop: 5,
     fontWeight: 'bold',
-    // paddingVertical: 10
+  },
+  imgStyle: {
+    height: 100,
+    width: 100,
+    marginBottom: 20,
   },
 });
 
-export default WeatherList;
+export default withTheme(WeatherList);

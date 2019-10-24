@@ -6,30 +6,37 @@ import {
   Text,
   Image,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
 import SearchBar from '../components/SearchBar';
 import axios from 'axios';
-import {API_KEY} from '../utils/WeatherApiKey';
 import LocationContext from '../context/LocationContext';
+import LocationContext1 from '../context/LocationContext1';
+import {withTheme} from '../core/themeProvider';
 
-const SearchCityScreen = () => {
+const KEY = '8fb06dddec8f87';
+
+const SearchCityScreen = ({navigation, theme}) => {
   const [term, setTerm] = useState('');
+  const [loader, setloader] = useState(true);
   const [content, setContent] = useState([]);
   const [errorMessage, setErrorMessage] = useState('');
 
-  const [location, setLocation] = useContext(LocationContext);
+  //const [location, setLocation] = useContext(LocationContext);
+  const [location, setLocation] = useContext(LocationContext1);
 
   const searchApi = term => {
     console.log('SEarch');
     try {
       axios
         .get(
-          `https://api.locationiq.com/v1/autocomplete.php?key=8fb06dddec8f87&q=${term}`,
+          `https://api.locationiq.com/v1/autocomplete.php?key=${KEY}&q=${term}`,
         )
         .then(res => {
           //setResults(res.data.list)
           console.log('res is', res.data);
           setContent(res.data);
+          setloader(false);
         });
       //setResults(response.data.coord);
     } catch (err) {
@@ -37,45 +44,31 @@ const SearchCityScreen = () => {
     }
   };
 
-  // useEffect(() => {
-  //   searchApi(term);
-  // }, []);
-
   return (
-    <View style={{flex: 1, backgroundColor: 'black'}}>
-      {/* <View
-        style={{position: 'absolute', top: 0, bottom: 0, left: 0, right: 0}}>
-        <Image
-          style={{
-            flex: 1,
-            flexDirection: 'column',
-            width: null,
-            height: null,
-            backgroundColor: 'transparent',
-            justifyContent: 'center',
-          }}
-          source={require('../utils/images/searchimg.jpg')}
-        />
-      </View> */}
+    <View style={[styles.container, {backgroundColor: theme.backgroundColor}]}>
       <SearchBar
         term={term}
         onTermChange={newTerm => setTerm(newTerm)}
         onTermSubmit={() => searchApi(term)}
       />
-      <Text style={{fontSize: 24, color: 'white'}}>{location.lat}</Text>
+      <Text style={[styles.locationText, {color: theme.color}]}>
+        {location.lat}
+      </Text>
+      <Text style={[styles.locationText, {color: theme.color}]}>
+        {location.lon}
+      </Text>
       <FlatList
         data={content}
         renderItem={({item}) => (
           <TouchableOpacity
             onPress={() =>
               //alert(item.lat)
-              setLocation(location => ({
-                ...location,
-                lat: item.lat,
-                lon: item.lon,
-              }))
+              {
+                setLocation({lat: item.lat, lon: item.lon});
+                navigation.navigate('SearchResults');
+              }
             }>
-            <Text style={{fontSize: 24, color: 'white'}}>
+            <Text style={[styles.displayText, {color: theme.color}]}>
               {item.display_name}
             </Text>
           </TouchableOpacity>
@@ -86,6 +79,21 @@ const SearchCityScreen = () => {
   );
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  locationText: {
+    fontSize: 24,
+    color: 'white',
+    marginHorizontal: 15,
+    marginBottom: 10,
+  },
+  displayText: {
+    fontSize: 24,
+    color: 'white',
+    marginHorizontal: 15,
+  },
+});
 
-export default SearchCityScreen;
+export default withTheme(SearchCityScreen);
