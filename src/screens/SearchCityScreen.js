@@ -1,48 +1,14 @@
-import React, {Component, useState, useEffect, useContext} from 'react';
-import {
-  StyleSheet,
-  View,
-  FlatList,
-  Text,
-  Image,
-  TouchableOpacity,
-  ActivityIndicator,
-} from 'react-native';
+import React, {useContext} from 'react';
+import {StyleSheet, View, FlatList, Text, TouchableOpacity} from 'react-native';
 import SearchBar from '../components/SearchBar';
-import axios from 'axios';
-import LocationContext from '../context/LocationContext';
 import LocationContext1 from '../context/LocationContext1';
 import {withTheme} from '../core/themeProvider';
-
-const KEY = '8fb06dddec8f87';
+import useSearch from '../hooks/useSearch';
 
 const SearchCityScreen = ({navigation, theme}) => {
-  const [term, setTerm] = useState('');
-  const [loader, setloader] = useState(true);
-  const [content, setContent] = useState([]);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [searchApi, term, setTerm, content, errorMessage] = useSearch();
 
-  //const [location, setLocation] = useContext(LocationContext);
   const [location, setLocation] = useContext(LocationContext1);
-
-  const searchApi = term => {
-    console.log('SEarch');
-    try {
-      axios
-        .get(
-          `https://api.locationiq.com/v1/autocomplete.php?key=${KEY}&q=${term}`,
-        )
-        .then(res => {
-          //setResults(res.data.list)
-          console.log('res is', res.data);
-          setContent(res.data);
-          setloader(false);
-        });
-      //setResults(response.data.coord);
-    } catch (err) {
-      setErrorMessage('Something Went Wrong');
-    }
-  };
 
   return (
     <View style={[styles.container, {backgroundColor: theme.backgroundColor}]}>
@@ -75,6 +41,7 @@ const SearchCityScreen = ({navigation, theme}) => {
         )}
         keyExtractor={(item, index) => index.toString()}
       />
+      {errorMessage ? <Text>{errorMessage}</Text> : null}
     </View>
   );
 };

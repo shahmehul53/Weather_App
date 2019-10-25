@@ -1,32 +1,35 @@
-import React, {Component} from 'react';
+import React, {Component, useState} from 'react';
 import {StyleSheet, View, Image, Text, TextInput} from 'react-native';
+import axios from 'axios';
+import LocationContext from '../context/LocationContext';
+import LocationContext1 from '../context/LocationContext1';
+
+const KEY = '8fb06dddec8f87';
 
 export default () => {
-  const searchApi = () => {
+  const [term, setTerm] = useState('');
+  const [loader, setloader] = useState(true);
+  const [content, setContent] = useState([]);
+  const [errorMessage, setErrorMessage] = useState('');
+
+  //const [location, setLocation] = useContext(LocationContext1);
+
+  const searchApi = term => {
     console.log('SEarch');
     try {
       axios
         .get(
-          `https://api.locationiq.com/v1/autocomplete.php?key=8fb06dddec8f87&q=Empire`,
+          `https://api.locationiq.com/v1/autocomplete.php?key=${KEY}&q=${term}`,
         )
         .then(res => {
-          //setResults(res.data.list)
+          console.log('res is', res.data);
+          setContent(res.data);
           setloader(false);
-          console.log(res);
-          console.log('array', res.data);
-          setResults(res.data);
-          setTemp(res.data.main);
-          setWeather(res.data.weather[0]);
         });
-      //setResults(response.data.coord);
     } catch (err) {
       setErrorMessage('Something Went Wrong');
     }
   };
 
-  useEffect(() => {
-    weatherApi();
-  }, []);
-
-  return [weatherApi, results, errorMessage, weather1, temp1, loader];
+  return [searchApi, term, setTerm, content, errorMessage];
 };

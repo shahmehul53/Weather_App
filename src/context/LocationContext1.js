@@ -12,7 +12,6 @@ const locationReducer = (state, action) => {
 };
 
 export const LocationProvider = ({children}) => {
-  //const [location, setLocation] = useState({lat: 16.708457, lon: 74.168826});
   const [location, dispatch] = useReducer(locationReducer, {
     lat: 16.708457,
     lon: 74.168826,

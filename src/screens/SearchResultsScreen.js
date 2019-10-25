@@ -12,8 +12,10 @@ import {API_KEY} from '../utils/WeatherApiKey';
 import LocationContext1 from '../context/LocationContext1';
 import {withTheme} from '../core/themeProvider';
 import WeatherDetails from '../components/WeatherDetails';
+import useDetails from '../hooks/useDetails';
 
-const SecondScreen = ({theme}) => {
+const SearchResultScreen = ({theme}) => {
+  //const [weatherApi, results, errorMessage, loader] = useDetails();
   const initialState = {
     data: {},
     list: [],
@@ -92,4 +94,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default withTheme(SecondScreen);
+export default withTheme(SearchResultScreen);

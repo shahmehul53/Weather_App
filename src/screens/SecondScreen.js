@@ -1,18 +1,13 @@
 import React, {Component, useState, useEffect} from 'react';
-import {
-  Text,
-  View,
-  StyleSheet,
-  FlatList,
-  TouchableOpacity,
-  ActivityIndicator,
-} from 'react-native';
+import {Text, View, StyleSheet, ActivityIndicator} from 'react-native';
 import axios from 'axios';
 import {API_KEY} from '../utils/WeatherApiKey';
 import WeatherDetails from '../components/WeatherDetails';
 import {withTheme} from '../core/themeProvider';
+import useDetails from '../hooks/useDetails';
 
 const SecondScreen = ({navigation, theme}) => {
+  //const [getResult, result, errorMessage, loader] = useDetails();
   const initialState = {
     data: {},
     list: [],
@@ -63,6 +58,7 @@ const SecondScreen = ({navigation, theme}) => {
           allDateTime={result.sys.sunset}
           speed={result.wind.speed}
         />
+        {/* {errorMessage ? <Text>{errorMessage}</Text> : null} */}
       </View>
     );
   }

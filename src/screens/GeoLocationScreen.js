@@ -34,7 +34,6 @@ const GeoLocationScreen = () => {
     axios
       .get(
         `https://api.openweathermap.org/data/2.5/forecast?lat=${position.latitude}&lon=${position.longitude}&APPID=${API_KEY}`,
-        //`https://api.openweathermap.org/data/2.5/forecast?lat=19.023462&lon=72.839987&APPID=${API_KEY}`,
       )
       .then(response => {
         console.log('response', response);
